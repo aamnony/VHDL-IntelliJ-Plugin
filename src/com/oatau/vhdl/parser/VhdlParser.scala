@@ -20,7 +20,7 @@ class VhdlParser() extends PsiParser{
     case (ENTITY,t) => t.parse(parseEntity)
     case (LIBRARY,t) => t.parse(parseLibrary)
     case (ARCHITECTURE,t) => t.parse(parseArchitecture)
-    case (token,t) => t.error("Expected use or entity or library or architecture")
+    case (token,t) => t.error("Expected USE, ENTITY, LIBRARY or ARCHITECTURE but found " + token)
   }
 
   def parse(builder: PsiBuilder) {
@@ -68,6 +68,7 @@ class VhdlParser() extends PsiParser{
             // TODO: Configurations
             // VHDL'93
             // TODO: Groups, Shared Variables
+            case (token,t) => t.error("unhandled token " + token)
         })
 
     def parseComponent(template: ParserTemplate) = template
@@ -93,6 +94,7 @@ class VhdlParser() extends PsiParser{
     case (ID,p) => p.beginMark().advance().switch {
       case (COLON,pp) => pp.advance().endMark(ParserTypes.LABEL).parse(parseConcurrentStatementTail)
       case (_,pp) => pp.rollbackToMark().parse(parseConcurrentStatementTail)
+      case (token,t) => t.error("unhandled token " + token)
     }
     case (_,p) => p.parse(parseConcurrentStatementTail)
   })
@@ -100,6 +102,7 @@ class VhdlParser() extends PsiParser{
   def parseConcurrentStatementTail(template: ParserTemplate) = template.switch {
     case (PROCESS,p) => template.parse(parseProcess)
     case (_,p) => p.parse(parseConcurrentAssignment)
+    case (token,t) => t.error("unhandled token " + token)
   }
 
   def parseProcess(template: ParserTemplate) = template
@@ -195,6 +198,7 @@ class VhdlParser() extends PsiParser{
     case (NAND,p) => p.advance().parse(parseRelationalExpression)
     case (NOR,p) => p.advance().parse(parseRelationalExpression)
     case (_,p) => p.`while`(TokenSet.create(AND,OR,XOR,XNOR).contains)(_.advance().parse(parseRelationalExpression))
+    case (token,t) => t.error("unhandled token " + token)
   }
 
   def parseRelationalExpression(template: ParserTemplate) = template
@@ -214,12 +218,14 @@ class VhdlParser() extends PsiParser{
     case (NOT,p) => p.advance().parse(parseExpressionElement)
     case (LEFPAREN,p) => p.advance().parse(parseExpression).recoverWith(RIGHPAREN->Before).expect(RIGHPAREN)
     case (_,p) => p.parse(parseExpressionElement).`while`(_==EXP)(_.parse(parseExpressionElement))
+    case (token,t) => t.error("unhandled token " + token)
   }
 
   def parseExpressionElement(template:ParserTemplate) = template.switch {
     case (ID,p) => p.beginMark().advance().switch{
       case (LEFPAREN,pp) => pp.parse(parseFunctionCall).endMark(ParserTypes.FUNCTION_CALL)
       case (_,pp) => p.endMark(ParserTypes.VARIABLE_REFERENCE)
+      case (token,t) => t.error("unhandled token " + token)
     }
 //    case (LEFPAREN,p) => p.beginMark().
     case (INTLIT,p) => p.expect(INTLIT)
