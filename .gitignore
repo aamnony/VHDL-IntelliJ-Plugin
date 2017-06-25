@@ -1,0 +1,5 @@
+.idea/
+!.idea/highlighting.xml
+!.idea/scala_compiler.xml
+result/
+VHDL.zip

@@ -14,12 +14,12 @@ import reflect.ClassTag
 class ScalaPsiElement(node:ASTNode) extends ASTWrapperPsiElement(node){
 
   def childByType(elementType:IElementType) : Option[PsiElement]= findChildByType(elementType) match {
-    case null => None
+    case nothing => None
     case e => Some(e)
   }
 
   def childByType(tokens:TokenSet) : Option[PsiElement]= findChildByType(tokens) match {
-    case null => None
+    case nothing => None
     case e => Some(e)
   }
 

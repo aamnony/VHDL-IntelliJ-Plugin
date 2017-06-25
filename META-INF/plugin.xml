@@ -1,19 +1,20 @@
 <idea-plugin version="2">
-    <id>com.yourcompany.unique.plugin.id</id>
-    <name>Plugin display name here</name>
-    <version>1.0</version>
-    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <id>com.oatau.vhdl</id>
+    <name>Vhdl editor for intelliJ</name>
+    <version>1.0.1</version>
+    <vendor email="pyroinc89@yahoo.com.au" url="https://github.com/Myrannas/VHDL">Michael Oates</vendor>
 
     <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <small>most HTML tags may be used</small>
+      This plugin allows you to edit vhdl code in an intelligent environment,
+      with all the niceties of modern programming including code completion,
+      refractoring, error checking and code navigation.
       ]]></description>
 
-    <change-notes><![CDATA[
+    <!--change-notes><![CDATA[
       Add change notes here.<br>
       <small>most HTML tags may be used</small>
       ]]>
-    </change-notes>
+    </change-notes-->
 
     <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
     <idea-version since-build="107.105"/>
@@ -38,11 +39,14 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <fileTypeFactory implementation="com.oatau.vhdl.VhdlFileTypeFactory"/>
-        <lang.parserDefinition language="Vhdl" implementationClass="com.oatau.vhdl.parser.VhdlParserDefinition"/>
-        <lang.syntaxHighlighterFactory key="Vhdl"
+        <lang.parserDefinition language="Vhdl"
+                               implementationClass="com.oatau.vhdl.parser.VhdlParserDefinition"/>
+        <lang.syntaxHighlighterFactory language="Vhdl"
                                        implementationClass="com.oatau.vhdl.highlight.VhdlSyntaxHighlighterFactory"/>
-        <completion.contributor language="Vhdl" implementationClass="com.oatau.vhdl.complete.EntityNamesCompletionContributor"/>
-        <completion.contributor language="Vhdl" implementationClass="com.oatau.vhdl.complete.VariableNamesCompletionContributor"/>
+        <completion.contributor language="Vhdl"
+                                implementationClass="com.oatau.vhdl.complete.EntityNamesCompletionContributor"/>
+        <completion.contributor language="Vhdl"
+                                implementationClass="com.oatau.vhdl.complete.VariableNamesCompletionContributor"/>
         <psi.referenceContributor implementation="com.oatau.vhdl.complete.VhdlReferenceContributor"/>
     </extensions>
 </idea-plugin>
