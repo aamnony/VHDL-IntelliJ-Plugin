@@ -84,7 +84,7 @@ class VhdlParser() extends PsiParser{
     .mark(ParserTypes.PROCESS)(
       _.expect(PROCESS)
         .parse(parseSensitivityList)
-        .parse(parseSignalList)
+        .parse(parseVariableList)
         .expect(BEGIN)
           .parse(parseSequentialStatementList)
         .expect(END)
@@ -112,6 +112,21 @@ class VhdlParser() extends PsiParser{
       .when(_==BLOCK_ASSIGN)(
         _.advance().parse(parseExpression)
     )).recoverWith(SEMI->Before).expect(SEMI)
+
+  def parseVariableList(template:ParserTemplate) = template
+      .`while`(_!=BEGIN)(
+        _.parse(parseVariable)
+  )
+
+  def parseVariable(template:ParserTemplate) = template
+      .mark(ParserTypes.VARIABLE)(_
+          .expect(VARIABLE)
+          .doWhile(_==CMA)(_.expect(ID))
+          .expect(COLON)
+          .parse(parseType)
+          .when(_==BLOCK_ASSIGN)(
+            _.advance().parse(parseExpression)
+          )).recoverWith(SEMI->Before).expect(SEMI)
 
   def parseConstant(template:ParserTemplate) = template
     .mark(ParserTypes.CONSTANT)(_

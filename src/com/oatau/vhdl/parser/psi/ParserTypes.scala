@@ -17,6 +17,7 @@ object ParserTypes {
   final val VARIABLE_REFERENCE: IElementType = new SimpleTokenType("variable_reference")
   final val PORT: IElementType = new SimpleTokenType("port")
   final val SIGNAL: IElementType = new SimpleTokenType("signal")
+  final val VARIABLE: IElementType = new SimpleTokenType("variable")
   final val PROCESS: IElementType = new SimpleTokenType("process")
   final val SENSITIVITY_LIST: IElementType = new SimpleTokenType("sensitivityList")
   final val TYPE : IElementType = new SimpleTokenType("type")
