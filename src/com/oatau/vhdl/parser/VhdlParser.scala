@@ -51,11 +51,33 @@ class VhdlParser() extends PsiParser{
         .expect(END).optional(ARCHITECTURE).optional(ID)
         .recoverWith(SEMI->Before).expect(SEMI))
 
-  def parseArchitectureDeclarations(template:ParserTemplate) = template
-      .`while`(_!=BEGIN)(_.switch {
-        case (SIGNAL,p) => p.parse(parseSignal)
-        case (CONSTANT,p) => p.parse(parseConstant)
-      })
+    def parseArchitectureDeclarations(template: ParserTemplate) = template
+        .`while`(_ != BEGIN)(_.switch {
+            // declarations
+            case (SIGNAL, p) => p.parse(parseSignal)
+            case (CONSTANT, p) => p.parse(parseConstant)
+            case (COMPONENT, p) => p.parse(parseComponent)
+            // TODO: case (ATTRIBUTE,p) => p.parse(parseAttribute)
+            // TODO: Aliases
+            // TODO: Types, Subtypes
+            // TODO: Files
+            // TODO: Sub-Programs
+            // definitions
+            // TODO: Attributes
+            // TODO: Sub-Programs
+            // TODO: Configurations
+            // VHDL'93
+            // TODO: Groups, Shared Variables
+        })
+
+    def parseComponent(template: ParserTemplate) = template
+        .mark(ParserTypes.COMPONENT)(_
+            .expect(COMPONENT).expect(ID).optional(IS)
+            .parse(parseGeneric)
+            .parse(parsePortStatement)
+            .recoverWith(END -> Before)
+            .expect(END).expect(COMPONENT).optional(ID)
+            .recoverWith(SEMI -> Before).expect(SEMI))
 
   def parsePortStatement(template: ParserTemplate) = template
     .expect(PORT).expect(LEFPAREN).when(_!=RIGHPAREN)(_.doWhile(_==SEMI)(_.parse(parsePort))).recoverWith((RIGHPAREN->Before)).expect(RIGHPAREN).expect(SEMI)

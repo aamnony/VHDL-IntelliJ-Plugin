@@ -26,4 +26,5 @@ object ParserTypes {
   final val GENERIC = new SimpleTokenType("generic")
   final val CONSTANT = new SimpleTokenType("constant")
   final val FUNCTION_CALL = new SimpleTokenType("function call")
+  final val COMPONENT = new SimpleTokenType("component")
 }
