@@ -10,6 +10,7 @@ import com.oatau.vhdl.psi.SimpleTokenType
  * Time: 8:31 AM
  */
 object ParserTypes {
+  final val ATTRIBUTE: IElementType = new SimpleTokenType("attribute")
   final val PACKAGE: IElementType = new SimpleTokenType("package")
   final val ENTITY: IElementType = new SimpleTokenType("entity")
   final val ARCHITECTURE: IElementType = new SimpleTokenType("architecture")

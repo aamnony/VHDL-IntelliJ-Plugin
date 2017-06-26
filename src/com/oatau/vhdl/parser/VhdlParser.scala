@@ -57,7 +57,7 @@ class VhdlParser() extends PsiParser{
             case (SIGNAL, p) => p.parse(parseSignal)
             case (CONSTANT, p) => p.parse(parseConstant)
             case (COMPONENT, p) => p.parse(parseComponent)
-            // TODO: case (ATTRIBUTE,p) => p.parse(parseAttribute)
+            case (ATTRIBUTE,p) => p.parse(parseAttribute)
             // TODO: Aliases
             // TODO: Types, Subtypes
             // TODO: Files
@@ -70,6 +70,12 @@ class VhdlParser() extends PsiParser{
             // TODO: Groups, Shared Variables
             case (token,t) => t.error("unhandled token " + token)
         })
+
+    def parseAttribute(template: ParserTemplate) = template
+        .mark(ParserTypes.ATTRIBUTE)(_
+            .expect(ATTRIBUTE).expect(ID).expect(COLON).parse(parseType)
+            .recoverWith(SEMI -> Before).expect(SEMI)
+        )
 
     def parseComponent(template: ParserTemplate) = template
         .mark(ParserTypes.COMPONENT)(_
